@@ -6,10 +6,7 @@ bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-});
+var port = (process.env.PORT  || 8000);
 
 // UI
 var AssistantV1 = require('watson-developer-cloud/assistant/v1');
@@ -33,8 +30,9 @@ app.post('/listen', (req, respuesta) => {
       function (err, response) {
         if (err) {
         } else {    
+          console.log(response.output.text)
             var text = {
-            "text": response.output.text[0]
+            "text": response.output.text[response.output.text.length-1]
           }
           respuesta.send({ success: true, text });
         }
@@ -42,9 +40,10 @@ app.post('/listen', (req, respuesta) => {
     );
   });
 
-app.listen(8000, () => {
-  console.log('Example app listening on port 8000!')
-});
+app.use(express.static(path.resolve(__dirname, 'front/build')));
 
-app.use(express.static(path.resolve(__dirname, 'ui/build')));
+var server = app.listen(port, function () {
+  console.log('Listening on port %d', server.address().port);
+});
+  
 
