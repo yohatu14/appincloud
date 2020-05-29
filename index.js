@@ -40,7 +40,7 @@ app.post('/listen', (req, respuesta) => {
     );
   });
 
-app.use(express.static(path.resolve(__dirname, 'front/build')));
+app.use(express.static(path.resolve(__dirname, 'front-end/build')));
 
 var server = app.listen(port, function () {
   console.log('Listening on port %d', server.address().port);
